@@ -27,6 +27,7 @@ App = {
       // Connect provider to interact with contract
       App.contracts.Election.setProvider(App.web3Provider);
 
+      App.listenForEvents();
       return App.render();
     });
   },
@@ -93,17 +94,30 @@ App = {
   castVote: function(){
 
     var candidateId = $('#candidatesSelect').val();
-    App.contracts.Election.deployed().then(instance =>{
-      //Wait for Votes to update
-      $('#content').hide();
-      $('#loader').show();
+    App.contracts.Election.deployed().then(instance =>{      
       return instance.vote(candidateId, {from: App.account});
     }).then(receipt =>{
-      //Wait for Votes to update
-      $('#loader').hide();
-      $('#content').show();
+      //Do nothing 
     }).catch(err =>{
       console.log(err);
+    });
+
+  },
+
+  listenForEvents: function() {
+
+    App.contracts.Election.deployed().then(instance => {
+      //Restart chrome if you're unable to receive this event.
+      //This is a known issue with MetaMask
+      //github.com/MetaMask/metamask-extension/issues/2393
+      instance.votedEvent({}, {
+        fromBlock: 0,
+        toBlock: 'latest'//Meaning we want to subscribe to event on the entire blockchain
+      }).watch((error, event) =>{
+        console.log("event triggered", event)
+        // Reload when a new vote is recorded
+        App.render();//Rerender the app
+      });
     });
 
   }

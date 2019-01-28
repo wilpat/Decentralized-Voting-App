@@ -22,6 +22,10 @@ contract Election {
     //Store candidate counts
     uint public candidatesCount;
 
+    // Voted event
+    event votedEvent(uint _candidateId);
+    
+
     //Since there is no way to find the count of a mapping because it gives non-existent mappings a default zero value in hexadecimal
     //We do it this way
     function addCandidate (string memory name) private {
@@ -47,6 +51,8 @@ contract Election {
     	
     	candidates[_candidateId].voteCount ++;
     	voted[msg.sender] = true;
+    	//Trigger voted event
+    	emit votedEvent(_candidateId);
     }
     
 }
