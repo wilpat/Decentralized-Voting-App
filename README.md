@@ -14,7 +14,7 @@ Sign into Metamask using either the Mnemonics on the dashboard or the private ke
 
 run `npm run dev` to get started
 
-### Technical details
+## Technical details
 I used the truffle pet-shop box to give me an out-of-the-box boilerplate to build on (You can pull that into your own
 projects by running `truffle unbox pet-shop`).
 
