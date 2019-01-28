@@ -2,7 +2,7 @@
 A voting application between two candidates built to run on the ethereum blockchain network
 
 ## Installation
-Clone this repo then run `npm install` to get all the dependncies in place
+Clone this repo then run `npm install` to get all the dependencies in place
 
 Download, install and launch ['Ganache'](https://truffleframework.com/ganache) -  a personal blockchain 
 for Ethereum development you can use to deploy contracts, develop applications, and run tests.
