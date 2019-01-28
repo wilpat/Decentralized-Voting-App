@@ -15,6 +15,9 @@ Sign into Metamask using either the Mnemonics on the dashboard or the private ke
 run `npm run dev` to get started
 
 ### Technical details
+I used the truffle pet-shop box to give me an out-of-the-box boilerplate to build on (You can pull that into your own
+projects by running `truffle unbox pet-shop`).
+
 The smart contract housing the logic of this app is in the contracts/Election.sol
 
 I used javascript to connect the smart contract to the front end of this app
