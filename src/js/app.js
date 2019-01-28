@@ -50,11 +50,15 @@ App = {
     // Load contract data
     App.contracts.Election.deployed().then( instance=> {
       electionInstance = instance;
-      return electionInstance.candidatesCount();
+      return electionInstance.candidatesCount();//Get the number of candidates through the getter fxn solidity gives public vars
     }).then(candidatesCount => {
       var candidatesResults = $("#candidatesResults");
       candidatesResults.empty();
 
+      var candidatesSelect = $("#candidatesSelect");
+      candidatesSelect.empty();
+
+      //Start rendering
       for (var i = 1; i <= candidatesCount; i++) {
         electionInstance.candidates(i).then(candidate => {
           console.log(candidate);
@@ -65,14 +69,43 @@ App = {
           // Render candidate Result
           var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
           candidatesResults.append(candidateTemplate);
+
+          //Render candidate ballot option
+          var candidateOption = `<option value = ${id}> ${name} </option>`;
+          candidatesSelect.append(candidateOption);
+
         });
       }
+      return electionInstance.voted(App.account);//Use this user's account address to get his vote status which is a promise
+                                                 //Because mappings return promises
+    }).then(hasVoted =>{
 
+      //Dont allow a user vote twice
+      hasVoted ? $('form').hide() : '';
       loader.hide();
       content.show();
+
     }).catch(function(error) {
       console.warn(error);
     });
+  },
+
+  castVote: function(){
+
+    var candidateId = $('#candidatesSelect').val();
+    App.contracts.Election.deployed().then(instance =>{
+      //Wait for Votes to update
+      $('#content').hide();
+      $('#loader').show();
+      return instance.vote(candidateId, {from: App.account});
+    }).then(receipt =>{
+      //Wait for Votes to update
+      $('#loader').hide();
+      $('#content').show();
+    }).catch(err =>{
+      console.log(err);
+    });
+
   }
 };
 
